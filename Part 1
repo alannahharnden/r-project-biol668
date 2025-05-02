@@ -3,9 +3,9 @@ title: "Alannah's R Project Part 1"
 output: html_notebook
 ---
 
-Part A: Univariate statistics with R
+# Part A: Univariate statistics with R
 
-Normality check & data transformation
+# Normality check & data transformation
 
 ```{r}
 bd = read.table("RTestData-1.txt", header=TRUE)
@@ -14,63 +14,63 @@ bd
 
 ```{r} 
 # (1) INITIAL PLOTS
-#strep
+# strep
 hist(bd$strep)
 qqnorm(bd$strep)
 qqline(bd$strep)
 
-#prev
+# prev
 hist(bd$prev)
 qqnorm(bd$prev)
 qqline(bd$prev)
 
-#lepto
+# lepto
 hist(bd$lepto)
 qqnorm(bd$lepto)
 qqline(bd$lepto)
 
-#fuso
+# fuso
 hist(bd$fuso)
 qqnorm(bd$fuso)
 qqline(bd$fuso)
 
-#veil
+# veil
 hist(bd$veil)
 qqnorm(bd$veil)
 qqline(bd$veil)
 
-#deepest
+# deepest
 hist(bd$deepest)
 qqnorm(bd$deepest)
 qqline(bd$deepest)
 
 # (2) TRANSFORMATIONS AND PLOT REPEATS
-#transformation of strep
+# transformation of strep
 strep = log(bd$strep)
 hist(strep)
 qqnorm(strep)
 qqline(strep)
 
-#transformation of prev
+# transformation of prev
 prev = sqrt(bd$prev)
 prev
 hist(prev)
 qqnorm(prev)
 qqline(prev)
 
-#transformation of lepto
+# transformation of lepto
 lepto = sqrt(bd$lepto)
 hist(lepto)
 qqnorm(lepto)
 qqline(lepto)
 
-#transformation of fuso
+# transformation of fuso
 fuso = sqrt(bd$fuso)
 hist(fuso)
 qqnorm(fuso)
 qqline(fuso)
 
-#transformation of veil
+# transformation of veil
 veil = sqrt(bd$veil)
 hist(veil)
 qqnorm(veil)
@@ -78,7 +78,7 @@ qqline(veil)
 
 ```
 
-One-way ANOVA and summmary and boxplots
+# One-way ANOVA and summmary and boxplots
 
 ```{r}
 # (1) lepto by time
@@ -90,7 +90,7 @@ oneway.test(strep ~ bd$time)
 boxplot(strep ~ bd$time)
 ```
 
-Correlation analysis 
+# Correlation analysis 
 
 ```{r}
 # (1) strep vs. prev
@@ -103,7 +103,7 @@ cor.test(strep, fuso)
 cor.test(fuso, lepto)
 ```
 
-Linear regressions
+# Linear regressions
 
 ```{r}
 # (1) strep vs. deepest
@@ -119,11 +119,11 @@ abline(fuso_vs_deepest)
 
 ```
 
-Part B: Use ggplot2 to make pretty graphs
+# Part B: Use ggplot2 to make pretty graphs
 
 ```{r}
 # (1) ggplot histogram of prev variable
-install.packages("ggplot2")
+# install.packages("ggplot2")
 library(ggplot2)
 ggplot(bd, aes(x = prev)) + geom_histogram()
 
@@ -137,13 +137,13 @@ ggplot(bd, aes(x=fuso, y=deepest)) + geom_point()
 ggplot(bd, aes(x=fuso, y=deepest)) + geom_point() + geom_smooth()
 ```
 
-Part C: Vegan analysis
+# Part C: Vegan analysis
 
 ```{r}
-install.packages("vegan")
+# install.packages("vegan")
 library(vegan)
 
-#creating new data frame
+# creating new data frame
 bd2=bd[2:6]
 bd2
 
@@ -156,7 +156,7 @@ species_abundance = rowSums(bd2)
 rare_minimum = min(rowSums(bd2))
 rare_minimum
 bd2
-bd2 = round(bd2) #rounding the data because rarefy is not working with the decimal numbers,giving error if not whole integers. this makes sense if it is asking for species number.
+bd2 = round(bd2) # rounding the data because rarefy is not working with the decimal numbers,giving error if not whole integers. this makes     # sense if it is asking for species number.
 rare_species = rarefy(bd2, rare_minimum)
 rarecurve(bd2, col = "purple")
 
