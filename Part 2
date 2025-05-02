@@ -5,7 +5,7 @@ output: html_notebook
 
 ```{r} 
 # Reading in the community data and installing picante.
-install.packages("picante", dependencies = TRUE)
+# install.packages("picante", dependencies = TRUE)
 
 comm <- read.csv("grassland_data/grassland.community.csv", header = TRUE, row.names = 1)
 
@@ -19,7 +19,7 @@ apply(comm, 1, sum)
 comm[1:5, 1:5]
 ```
 
-Reading in the trait data.
+# Reading in the trait data.
 ```{r}
 traits <- read.csv("grassland_data/species.traits.csv", header = TRUE, row.names = 1)
 
@@ -31,16 +31,16 @@ traits <- log10(traits)
 pairs(traits)
 ```
 
-Reading in the metadata
+# Reading in the metadata
 ```{r}
 metadata <- read.csv("grassland_data/plot.metadata.csv", header = TRUE, row.names = 1)
 head(metadata)
 ```
 
-Reading in the phylogeny data and taking a closer look.
+# Reading in the phylogeny data and taking a closer look.
 ```{r}
-#installing packages required for phylogeny visualization.
-install.packages("ape")
+# installing packages required for phylogeny visualization.
+# install.packages("ape")
 library(ape)
 
 phy <- read.tree("grassland_data/grassland.phylogeny.newick")
@@ -51,7 +51,7 @@ Ntip(phy)
 plot(phy, cex =0.5)
 ```
 
-Cleaning and matching datasets 
+# Cleaning and matching datasets 
 ```{r}
 library(picante)
 ls()
@@ -65,7 +65,7 @@ all.equal(rownames(comm), rownames(metadata))
 metadata <- metadata[rownames(comm), ]
 ```
 
-Visualizing and summarizing biodiversity data
+# Visualizing and summarizing biodiversity data
 ```{r}
 boxplot(specnumber(comm) ~ metadata$rel.moisture, ylab = "# of species")
 t.test(specnumber(comm) ~ metadata$habitat)
@@ -73,9 +73,9 @@ plot(specaccum(comm), xlab = "# of samples", ylab = "# of species")
 
 ```
 
-Multivariate community analysis 
+# Multivariate community analysis 
 
-Ordination is "ordaining" data to a matrix that will allow a closer look at community composition. Ordiplots can be used in various ways to assess how well the data is relating the community and its species. The red crosses indicate the species, so we can appreciate the different clusters formed. The addition of the environmental and trait data also adds to these clustering patterns and easing visualization.
+# Ordination is "ordaining" data to a matrix that will allow a closer look at community composition. Ordiplots can be used in various ways to  # assess how well the data is relating the community and its species. The red crosses indicate the species, so we can appreciate the different # clusters formed. The addition of the environmental and trait data also adds to these clustering patterns and easing visualization.
 
 ```{r}
 # A) Hierarchical clustering
@@ -97,25 +97,25 @@ ordicluster(comm.bc.mds, comm.bc.clust, col = "gray")
 ordisurf(comm.bc.mds, comm[, "Sphaeralcea_coccinea"], bubble = TRUE, main = "Sphaeralcea coccinea abundance", 
     cex = 3)
 
-#Adding environmental and trait data to ordination.
+# Adding environmental and trait data to ordination.
 ordiplot(comm.bc.mds)
 plot(envfit(comm.bc.mds, metadata[, 3:6]))
 
 ```
 
-Trait evolution
+# Trait evolution
 ```{r}
 # Phylogenetic signal
 apply(traits, 2, Kcalc, phy)
 multiPhylosignal(traits, multi2di(phy))
 
-#Visualizing trait evolution
+# Visualizing trait evolution
 plot(phy, direction = "up", show.tip.label = FALSE, show.node.label = TRUE, 
     cex = 0.7)
 tiplabels(pch = 19, col = "black", cex = 3 * (traits[, "LeafArea"]/max(traits[, 
     "LeafArea"])))
 
-#Phylogenetic analysis of trait relationships
+# Phylogenetic analysis of trait relationships
 root.gls <- gls(RootTissueDens ~ SRL, data = traits)
 anova(root.gls)
 root.pgls <- gls(RootTissueDens ~ SRL, correlation = corBrownian(value = 1, 
@@ -130,11 +130,11 @@ legend("bottomleft", legend = c("GLS fit", "Phylogenetic GLS fit"), lwd = 2,
 
 ```
 
-Phylogenetic and trait diversity
+# Phylogenetic and trait diversity
 
-Cophenetic is a type of distance determination for the aforementioned hierarchial clustering, only this time, looking at dissimilarity amongst individual clusters.
+# Cophenetic is a type of distance determination for the aforementioned hierarchial clustering, only this time, looking at dissimilarity       # amongst individual clusters.
 
-Here, we assigned that calculation to phy.dist, then plotted against relative moisture. These are visualized as a scatterplot with an abline to look at trend.
+# Here, we assigned that calculation to phy.dist, then plotted against relative moisture. These are visualized as a scatterplot with an abline # to look at trend.
 
 ```{r}
 # Phylogenetic diversity
@@ -144,7 +144,7 @@ boxplot(comm.pd$PD ~ metadata$rel.moisture, xlab = "Habitat", ylab = "Faith's PD
 t.test(comm.pd$PD, metadata$rel.moisture)
 plot(comm.pd$PD ~ comm.pd$SR, xlab = "Species richness", ylab = "Faith's PD")
 
-#MPD, MNTD, SESMPD and SESMNTD
+# MPD, MNTD, SESMPD and SESMNTD
 phy.dist <- cophenetic(phy)
 comm.sesmpd <- ses.mpd(comm, phy.dist, null.model = "richness", abundance.weighted = FALSE, 
     runs = 999)
@@ -171,7 +171,7 @@ plot(phy, show.tip.label = FALSE, main = "Relative moisture")
 tiplabels(tip = which(phy$tip.label %in% colnames(comm)[comm["Relative moisture", ] > 
     0]), pch = 19)
 
-#Trait diversity
+# Trait diversity
 trait.dist <- as.matrix(dist(scale(traits), method = "euclidean"))
 comm.sesmpd.traits <- ses.mpd(comm, trait.dist, null.model = "richness", abundance.weighted = FALSE, 
     runs = 999)
@@ -181,9 +181,9 @@ abline(h = 0, col = "gray")
 
 ```
 
-Phylogenetic beta-diversity
+# Phylogenetic beta-diversity
 
-The mantel analysis observes two different distance matrices, (a pair of them, since this is beta-diversity assessment) to evaluate the phylogenetic and trait relationships for this community.It outputs the r-value and the p-value. 
+# The mantel analysis observes two different distance matrices, (a pair of them, since this is beta-diversity assessment) to evaluate the      # phylogenetic and trait relationships for this community.It outputs the r-value and the p-value. 
 
 ```{r}
 comm.mntd.dist <- comdistnt(comm, phy.dist, abundance.weighted = TRUE)
@@ -192,11 +192,11 @@ mantel(comm.bc.dist, comm.mntd.dist)
 mantel(comm.bc.dist, comm.mntd.traits.dist)
 ```
 
-Phylogeny/trait-based ordinations
+# Phylogeny/trait-based ordinations
 
-NMDS (non-metric multidimensional scaling). Using ordination, this function can help determine community composition while showing pairwise dissimilarity, even with the many different data. This is done by using ranking of the data, which shows the grouping of species, while those more "dissimilar" are further from one another, based on both phylogeny and traits. 
+# NMDS (non-metric multidimensional scaling). Using ordination, this function can help determine community composition while showing pairwise  # dissimilarity, even with the many different data. This is done by using ranking of the data, which shows the grouping of species, while those # more "dissimilar" are further from one another, based on both phylogeny and traits. 
 
-From the results here, we can visualize the different habitat types and relation to relative mositure data and where the communities in this ecosystem stand.
+# From the results here, we can visualize the different habitat types and relation to relative mositure data and where the communities in this # ecosystem stand.
 
 ```{r}
 comm.mntd.mds <- monoMDS(comm.mntd.dist)
@@ -211,19 +211,19 @@ points(mds.fig, "sites", pch = 19, col = "green", select = metadata$rel.moisture
     "Fescue")
 points(mds.fig, "sites", pch = 19, col = "blue", select = metadata$rel.moisture == 
     "Mixedgrass")
-# add confidence ellipses around habitat types
+# Add confidence ellipses around habitat types
 ordiellipse(comm.mntd.traits.mds, metadata$rel.moisture, conf = 0.95, label = TRUE)
 
 
 ```
 
-Testing for multivariate differences among groups
+# Testing for multivariate differences among groups
 
-Adonis2 (the updated version of Adonis) is utilized for analyzing and comparing sum of squares results for multiple variables at once: in this case, we are looking at trait distance and relative moisture for community metadata. This is like ANOVA, but multivariate. 
+# Adonis2 (the updated version of Adonis) is utilized for analyzing and comparing sum of squares results for multiple variables at once: in    # this case, we are looking at trait distance and relative moisture for community metadata. This is like ANOVA, but multivariate. 
 
-The results here show something similar to the output of running ANOVA, including the p-value as well, demonstrating significance at 0.001. However, here there are also formula for each output, interpreted by what was placed in the parentheses for each execution of adonis2. The long list of numbers is the 999 permutations.
+# The results here show something similar to the output of running ANOVA, including the p-value as well, demonstrating significance at 0.001.  # However, here there are also formula for each output, interpreted by what was placed in the parentheses for each execution of adonis2. The   # long list of numbers is the 999 permutations.
 
-#Adonis 
+# Adonis 
 ```{r}
 
 adonis2(comm.bc.dist ~ rel.moisture, data = metadata)
