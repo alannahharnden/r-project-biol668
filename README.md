@@ -1,5 +1,8 @@
+# R Project, BIOL668
+## Description
 This is a completed R project for the BIOL 668 course taught by DSK at San Diego State.
 
+## Instructions
 1) Download the necessary files, as included in this repository.
    
 2)  Utilize RTestData-1.txt for Part 1 and perform a variety of built-in R statistical tests.
