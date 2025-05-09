@@ -5,7 +5,7 @@ This is a completed R project for the BIOL 668 course taught by DSK at San Diego
   - RTestData-1.txt
   - grassland_data.zip (source: https://kembellab.ca/r-workshop/)
 
-## Instructions (Part 1)
+## Instructions (Part 1 Notebook)
 Download the necessary files, as included in this repository.
 
 
@@ -57,12 +57,38 @@ rare_data = rarefy(data2, rare_minimum)
 rarecurve(data2, col = "purple")
 ```
 
-Next, employ some multidimensional scaling (MDS) methods for elucidating the bacterial samples' relationships, based on dissimilarity, and producing a plot in multidimensional space. The following link will guide you through performing MDS with Bray-curtis matrix, and detail how you can color the plot by statis and time, using the aforementioned ``ggplot2``: https://environmentalcomputing.net/graphics/multivariate-vis/mds/
+Next, employ some multidimensional scaling (MDS) methods for elucidating the bacterial samples' relationships, based on dissimilarity, and producing a plot in multidimensional space. The following link will guide you through performing MDS with Bray-curtis matrix, and detail how you can color the plot by status and time, using the aforementioned ``ggplot2``: https://environmentalcomputing.net/graphics/multivariate-vis/mds/
 
 
-## Instructions (Part 2)
+## Instructions (Part 2 Notebook)
 
-For the provided Part 2 notebook, the grassland_data.zip file was used, alongside the tutorial at http://kembellab.ca/r-workshop/biodivR/SK_Biodiversity_R.html.
+For the provided Part 2 notebook, the grassland_data.zip file was used, alongside the guided tutorial at http://kembellab.ca/r-workshop/biodivR/SK_Biodiversity_R.html.
 
+Again, begin with installing the relevant packages: in this case, ``picante``. 
 
+```
+install.packages("picante", dependencies = TRUE)
 
+# try this instead if you are unable to connect to the CRAN mirror
+install.packages('picante', dependencies=TRUE, repos='http://cran.rstudio.com/')
+```
+
+If you have not already installed ``ape``, which is related, you will also need to download that. 
+
+Load in those libraries, alongside ``vegan``, which will be necessary for later exercises in the tutorial.
+
+You'll be accessing files within the grassland dataset, so a similar path should be used:
+```
+comm <- read.csv("grassland_data/grassland.community.csv", header = TRUE, row.names = 1)
+```
+
+##### Note: the provided notebook here, invegsitages rel.moisture (metadata$rel.moisture) instead of analyzing the effect of habitat (metadata$habitat). Thus, all of the code in the tutorial discussing habitat analysis should be replaced to look at rel.moisture.
+
+Here is an example, while performing ordination: 
+
+```
+mds.fig <- ordiplot(comm.bc.mds, type = "none")
+points(mds.fig, "sites", pch = 19, col = "green", select = metadata$rel.moisture)
+ordiellipse(comm.bc.mds, metadata$rel.moisture, conf = 0.95, label = TRUE)
+ordicluster(comm.bc.mds, comm.bc.clust, col = "gray")
+```
