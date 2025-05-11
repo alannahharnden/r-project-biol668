@@ -1,6 +1,6 @@
 # R Project - BIOL668
 ## Description
-This is a completed R project for the BIOL 668 course taught by DSK at San Diego State.
+This is a completed R project for the BIOL 668 course taught by Dr. Scott Kelley at San Diego State.
 - Required files:
   - RTestData-1.txt
   - grassland_data.zip (source: https://kembellab.ca/r-workshop/)
